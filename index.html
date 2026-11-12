@@ -53,7 +53,7 @@
         <a href="#private-chats">Private Chats</a>
         <a href="#community-forum">Community Forum</a>
         <a href="#pricing">Pricing</a>
-        <select class="lang-select" onchange="setLanguage(this.value)">
+        <select id="langSelect" class="lang-select" onchange="setLanguage(this.value)">
           <option value="en">English</option>
           <option value="es">Español</option>
           <option value="zh">中文</option>
@@ -74,7 +74,7 @@
   <section class="hero container">
     <div class="hero-content">
       <h1>Stay Connected <span>After the Elections</span></h1>
-      <p>Candidates make promises. Constituents deserve follow-through. SCATE keeps winners, losers, aspiring candidates, and residents talking year-round — in any language.</p>
+      <p>Candidates make promises. Constituents deserve follow-through. SCATE keeps winners, losers, aspiring candidates, and residents talking year-round — in the language of your community.</p>
       <div>
         <a href="#pricing" class="btn btn-primary">For Candidates</a>
         <a href="#join" class="btn btn-outline">For Residents (Free)</a>
@@ -86,19 +86,19 @@
   </section>
   <section id="features" class="container">
     <h2>Don’t SCATE Away After You Win</h2>
-    <p class="subtitle">Profiles for everyone. Free questions from residents. Local good news, sports stories, and community forums — all localized.</p>
+    <p class="subtitle">Profiles for everyone. Free questions from residents. Local good news, sports stories, and community forums — default language set by your location.</p>
     <div class="features">
       <div class="feature">
-        <h3>All Languages Toggle</h3>
-        <p>Full language support with an easy toggle. At sign up, geolocation suggests your preferred language and sets your local district context automatically.</p>
+        <h3>Default Language from Geolocation</h3>
+        <p>On first visit or sign up, SCATE detects your location and automatically sets the interface language to the most common one for that area. You can always override it.</p>
       </div>
       <div class="feature">
         <h3>Geolocation at Sign Up</h3>
-        <p>Permission-based location capture on signup. Instantly places you in the right candidate bubble and recommends the most common languages for your area.</p>
+        <p>Permission-based location capture. Places you in the correct candidate bubble and locks in the local default language.</p>
       </div>
       <div class="feature">
         <h3>Stay in Touch + Forum</h3>
-        <p>Private chats, host-created local topics, likes/dislikes, and optional anonymity — all inside your geo bubble.</p>
+        <p>Private chats, host-created local topics, likes/dislikes, and optional anonymity — all inside your geo bubble, in your language.</p>
       </div>
     </div>
   </section>
@@ -108,7 +108,7 @@
   </section>
   <section id="community-forum" class="container">
     <h2>Community Forum — Local Topics</h2>
-    <p class="subtitle">Hosts create topics inside their geo bubble. Registered residents share thoughts (optionally anonymously), like or dislike, in their preferred language.</p>
+    <p class="subtitle">Hosts create topics inside their geo bubble. Registered residents share thoughts (optionally anonymously), like or dislike, in the language defaulted from location.</p>
   </section>
   <section id="pricing" style="background: white;">
     <div class="container">
@@ -124,7 +124,7 @@
   <section class="container">
     <div class="geo-note">
       <h2>Your District. Your Language. Year-Round.</h2>
-      <p style="margin-top: 16px; color: var(--gray);">Sign up with geolocation so SCATE knows your community. Toggle any language. Stay connected with the people who represent you.</p>
+      <p style="margin-top: 16px; color: var(--gray);">Language defaults to your geolocation. Toggle anytime. Stay connected with the people who represent you.</p>
       <a href="#join" class="btn btn-primary" style="margin-top: 24px;" id="join">Get Early Access</a>
     </div>
   </section>
@@ -133,14 +133,43 @@
   <div class="container">
     <div class="tagline">Don’t SCATE away after you win.</div>
     <p>scate.app — Stay Connected After The Elections</p>
-    <p style="margin-top: 16px; opacity: 0.8;">© 2026 SCATE.app · All Languages · Geo at Signup · Profiles · Forum · Free for Residents</p>
+    <p style="margin-top: 16px; opacity: 0.8;">© 2026 SCATE.app · Default Language from Geo · All Languages · Profiles · Forum · Free for Residents</p>
   </div>
 </footer>
 <script>
 function setLanguage(code) {
   document.documentElement.lang = code;
+  const select = document.getElementById('langSelect');
+  if (select) select.value = code;
   console.log('Language set to', code);
 }
+
+function languageFromLocation(lat, lng) {
+  if (lat > 32 && lat < 42 && lng > -125 && lng < -114) return 'en';
+  if (lat > 25 && lat < 32 && lng > -100 && lng < -80) return 'es';
+  if (lng > 100 && lng < 125 && lat > 20 && lat < 45) return 'zh';
+  return navigator.language?.slice(0, 2) || 'en';
+}
+
+function defaultLanguageFromGeo() {
+  if (!navigator.geolocation) {
+    setLanguage(navigator.language?.slice(0, 2) || 'en');
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lang = languageFromLocation(pos.coords.latitude, pos.coords.longitude);
+      setLanguage(lang);
+      console.log('Defaulted language from geo:', lang, pos.coords);
+    },
+    () => {
+      setLanguage(navigator.language?.slice(0, 2) || 'en');
+    },
+    { enableHighAccuracy: false, timeout: 8000, maximumAge: 300000 }
+  );
+}
+
+defaultLanguageFromGeo();
 </script>
 </body>
 </html>
