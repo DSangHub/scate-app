@@ -2,9 +2,20 @@
 -- Postgres + PostGIS
 -- Run after enabling PostGIS: CREATE EXTENSION IF NOT EXISTS postgis;
 
+-- Users (signup with geolocation + preferred language)
+CREATE TABLE IF NOT EXISTS users (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  email text UNIQUE,
+  preferred_language text DEFAULT 'en',
+  signup_lat double precision,
+  signup_lng double precision,
+  signup_geo geography(point, 4326),
+  created_at timestamptz DEFAULT now()
+);
+
 CREATE TABLE IF NOT EXISTS geo_bubbles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  host_id uuid NOT NULL,
+  host_id uuid NOT NULL REFERENCES users(id),
   name text,
   polygon geography(polygon, 4326),
   center geography(point, 4326),
