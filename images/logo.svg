@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="t">
+  <title id="t">SCATE.app logo: a man and a woman walking toward the US Capitol</title>
+  <defs>
+    <clipPath id="disc"><circle cx="100" cy="100" r="91"/></clipPath>
+  </defs>
+
+  <!-- ring + sky -->
+  <circle cx="100" cy="100" r="99" fill="#00A3A1"/>
+  <circle cx="100" cy="100" r="91" fill="#0A2540"/>
+
+  <g clip-path="url(#disc)">
+    <!-- ground and walkway -->
+    <rect x="0" y="130" width="200" height="80" fill="#008C8A"/>
+    <polygon points="86,136 114,136 156,200 44,200" fill="#F7F9FC"/>
+
+    <!-- Capitol -->
+    <g fill="#FFFFFF">
+      <!-- statue + lantern -->
+      <circle cx="100" cy="22" r="2.4"/>
+      <rect x="98.8" y="23" width="2.4" height="9"/>
+      <rect x="95.5" y="31" width="9" height="10" rx="1"/>
+      <!-- dome -->
+      <path d="M82 68 C82 50 91 40 100 40 C109 40 118 50 118 68 Z"/>
+      <!-- drum -->
+      <rect x="80" y="66" width="40" height="5"/>
+      <rect x="83" y="71" width="34" height="14"/>
+      <rect x="78" y="84" width="44" height="5"/>
+      <!-- main block and end pavilions -->
+      <rect x="30" y="104" width="140" height="26"/>
+      <rect x="20" y="99" width="34" height="31"/>
+      <rect x="146" y="99" width="34" height="31"/>
+      <polygon points="18,99 37,91 56,99"/>
+      <polygon points="144,99 163,91 182,99"/>
+      <!-- central portico -->
+      <rect x="76" y="98" width="48" height="32"/>
+      <polygon points="72,99 100,86 128,99"/>
+      <!-- steps -->
+      <polygon points="74,130 126,130 132,137 68,137" fill="#DCE6F0"/>
+    </g>
+
+    <!-- columns and windows, cut in navy -->
+    <g stroke="#0A2540" stroke-linecap="butt">
+      <g stroke-width="2">
+        <path d="M89 73v11M94.5 73v11M100 73v11M105.5 73v11M111 73v11"/>
+      </g>
+      <g stroke-width="2.6">
+        <path d="M82 102v28M89 102v28M96 102v28M104 102v28M111 102v28M118 102v28"/>
+        <path d="M27 103v27M33.5 103v27M40 103v27M46.5 103v27"/>
+        <path d="M153.5 103v27M160 103v27M166.5 103v27M173 103v27"/>
+      </g>
+      <g stroke-width="3.2">
+        <path d="M61 110v6M68 110v6M61 121v6M68 121v6"/>
+        <path d="M132 110v6M139 110v6M132 121v6M139 121v6"/>
+      </g>
+    </g>
+
+    <!-- man (left) and woman (right), seen from behind, walking toward the building -->
+    <g transform="translate(0 -8)" fill="#0A2540" stroke="#0A2540" stroke-linecap="round" stroke-linejoin="round">
+      <!-- man -->
+      <circle cx="84" cy="147" r="5.6" stroke="none"/>
+      <rect x="76.5" y="154" width="15" height="21" rx="4.5" stroke="none"/>
+      <path d="M77.5 157L74 170M90.5 157L94 170" stroke-width="3.6" fill="none"/>
+      <path d="M81 174L78 191M87 174L90.5 190" stroke-width="5.2" fill="none"/>
+      <!-- woman -->
+      <circle cx="116" cy="149" r="5.2" stroke="none"/>
+      <rect x="110.3" y="147" width="11.4" height="11" rx="4.5" stroke="none"/>
+      <path d="M110.5 156h11l5.5 23h-22z" stroke-width="2"/>
+      <path d="M110 158L106 170M122 158L126 170" stroke-width="3.2" fill="none"/>
+      <path d="M113 180L111.5 191M119 180L121 190" stroke-width="3.6" fill="none"/>
+    </g>
+  </g>
+</svg>
