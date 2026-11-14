@@ -26,6 +26,12 @@
   .hero-content p { font-size: 1.25rem; color: var(--gray); margin-bottom: 32px; }
   .hero-image { border-radius: 16px; overflow: hidden; box-shadow: 0 12px 32px rgba(10,37,64,0.12); }
   .hero-image img { width: 100%; display: block; }
+  /* Hero background: US Capitol, west front. Photo: Architect of the Capitol (public domain), via Wikimedia Commons. */
+  .hero-bg { background: linear-gradient(rgba(10,37,64,0.78), rgba(10,37,64,0.86)), url("https://commons.wikimedia.org/wiki/Special:FilePath/United_States_Capitol_-_west_front.jpg?width=1920") center / cover no-repeat var(--navy); }
+  .hero-bg .hero-content h1 { color: var(--white); }
+  .hero-bg .hero-content p { color: #DCE6F0; }
+  .hero-bg .btn-outline { border-color: var(--white); color: var(--white); }
+  .hero-bg .btn-outline:hover { background: var(--white); color: var(--navy); }
   section { padding: 80px 0; }
   h2 { font-size: 2.25rem; text-align: center; margin-bottom: 16px; }
   .subtitle { text-align: center; color: var(--gray); max-width: 640px; margin: 0 auto 48px; }
@@ -71,6 +77,7 @@
   </div>
 </header>
 <main>
+  <div class="hero-bg">
   <section class="hero container">
     <div class="hero-content">
       <h1>Stay Connected <span>After the Elections</span></h1>
@@ -84,6 +91,7 @@
       <img src="/images/hero.jpg" alt="Community connecting on SCATE">
     </div>
   </section>
+  </div>
   <section id="features" class="container">
     <h2>Don’t SCATE Away After You Win</h2>
     <p class="subtitle">Profiles for everyone. Free questions from residents. Local good news, sports stories, and community forums — default language set by your location.</p>
