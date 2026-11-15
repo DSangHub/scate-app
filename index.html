@@ -47,6 +47,34 @@
   footer { background: var(--navy); color: white; padding: 48px 0; text-align: center; }
   footer .tagline { font-size: 1.5rem; font-weight: 600; margin-bottom: 8px; }
   .geo-note { background: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 40px; }
+  /* Create-profile dialog */
+  button.btn { border: none; cursor: pointer; font: inherit; font-weight: 600; }
+  button.btn.btn-outline { border: 2px solid var(--teal); }
+  .hero-bg button.btn-outline { border-color: var(--white); }
+  .join-dialog { border: none; border-radius: 16px; padding: 0; width: min(440px, calc(100vw - 32px)); margin: auto; color: var(--navy); box-shadow: 0 24px 64px rgba(10,37,64,0.35); }
+  .join-dialog::backdrop { background: rgba(10,37,64,0.6); }
+  .join-body { padding: 32px; position: relative; }
+  .join-body h2 { font-size: 1.6rem; text-align: left; margin-bottom: 4px; }
+  .join-body .join-sub { color: var(--gray); margin-bottom: 24px; }
+  .join-close { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: none; background: none; font-size: 1.5rem; line-height: 1; color: var(--gray); cursor: pointer; border-radius: 8px; }
+  .join-close:hover { background: var(--light); }
+  .join-choice { display: grid; gap: 12px; }
+  .join-choice button { text-align: left; padding: 16px 18px; border: 2px solid #DCE6F0; border-radius: 12px; background: var(--white); cursor: pointer; font: inherit; color: var(--navy); }
+  .join-choice button:hover, .join-choice button:focus-visible { border-color: var(--teal); outline: none; }
+  .join-choice strong { display: block; font-size: 1.1rem; }
+  .join-choice span { color: var(--gray); font-size: 0.95rem; }
+  .join-type { display: flex; align-items: center; justify-content: space-between; background: var(--light); border-radius: 8px; padding: 10px 14px; margin-bottom: 20px; font-weight: 600; }
+  .join-type button { border: none; background: none; color: var(--teal); font: inherit; font-weight: 600; cursor: pointer; text-decoration: underline; }
+  .join-field { margin-bottom: 16px; }
+  .join-field label { display: block; font-weight: 600; margin-bottom: 6px; }
+  .join-field input { width: 100%; padding: 12px 14px; border: 1px solid #C5D1DD; border-radius: 8px; font: inherit; color: var(--navy); }
+  .join-field input:focus { outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
+  .join-submit { width: 100%; margin-top: 8px; }
+  .join-submit[disabled] { opacity: 0.6; cursor: default; }
+  .join-msg { margin-top: 14px; font-size: 0.95rem; min-height: 1.4em; }
+  .join-msg.error { color: #B42318; }
+  .join-note { margin-top: 12px; font-size: 0.85rem; color: var(--gray); }
+  [hidden] { display: none !important; }
   @media (max-width: 768px) { .hero { grid-template-columns: 1fr; text-align: center; } .hero-content h1 { font-size: 2.25rem; } .nav-links { display: none; } }
 </style>
 </head>
@@ -72,7 +100,7 @@
           <option value="fr">Français</option>
           <option value="hi">हिन्दी</option>
         </select>
-        <a href="#join" class="btn btn-primary">Join SCATE</a>
+        <button type="button" class="btn btn-primary" data-join>Join SCATE</button>
       </div>
     </nav>
   </div>
@@ -84,8 +112,8 @@
       <h1>Interested in <span>Public Service?</span></h1>
       <p>Create a Profile and interact with your constituents.</p>
       <div>
-        <a href="#pricing" class="btn btn-primary">For Candidates</a>
-        <a href="#join" class="btn btn-outline">For Residents (Free)</a>
+        <button type="button" class="btn btn-primary" data-join="candidate">For Candidates</button>
+        <button type="button" class="btn btn-outline" data-join="resident">For Residents (Free)</button>
       </div>
     </div>
     <div class="hero-image">
@@ -131,10 +159,10 @@
     </div>
   </section>
   <section class="container">
-    <div class="geo-note">
+    <div class="geo-note" id="join">
       <h2>Your District. Your Language. Year-Round.</h2>
       <p style="margin-top: 16px; color: var(--gray);">Language defaults to your geolocation. Toggle anytime. Stay connected with the people who represent you.</p>
-      <a href="#join" class="btn btn-primary" style="margin-top: 24px;" id="join">Get Early Access</a>
+      <button type="button" class="btn btn-primary" style="margin-top: 24px;" data-join>Get Early Access</button>
     </div>
   </section>
 </main>
@@ -145,6 +173,48 @@
     <p style="margin-top: 16px; opacity: 0.8;">© 2026 SCATE.app · Default Language from Geo · All Languages · Profiles · Forum · Free for Residents</p>
   </div>
 </footer>
+
+<dialog class="join-dialog" id="joinDialog" aria-labelledby="joinTitle">
+  <div class="join-body">
+    <button type="button" class="join-close" id="joinClose" aria-label="Close">&times;</button>
+
+    <div id="joinStepChoose">
+      <h2 id="joinTitle">Create your profile</h2>
+      <p class="join-sub">How will you use SCATE?</p>
+      <div class="join-choice">
+        <button type="button" data-type="candidate"><strong>For Candidates</strong><span>Running, serving, or thinking about it. Talk with your constituents.</span></button>
+        <button type="button" data-type="resident"><strong>For Residents</strong><span>Free. Ask questions and follow the people who represent you.</span></button>
+      </div>
+    </div>
+
+    <form id="joinStepForm" hidden novalidate>
+      <h2>Create your profile</h2>
+      <p class="join-sub">Three details and you're in.</p>
+      <div class="join-type"><span id="joinTypeLabel"></span><button type="button" id="joinChange">Change</button></div>
+      <div class="join-field">
+        <label for="joinName">User name</label>
+        <input id="joinName" name="username" type="text" autocomplete="username" minlength="2" maxlength="40" required>
+      </div>
+      <div class="join-field">
+        <label for="joinEmail">Email</label>
+        <input id="joinEmail" name="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="join-field">
+        <label for="joinZip">Zip code</label>
+        <input id="joinZip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" pattern="[0-9]{5}(-[0-9]{4})?" maxlength="10" required>
+      </div>
+      <button type="submit" class="btn btn-primary join-submit" id="joinSubmit">Create profile</button>
+      <p class="join-msg" id="joinMsg" role="status" aria-live="polite"></p>
+      <p class="join-note">We'll email you a link to confirm. No password needed.</p>
+    </form>
+
+    <div id="joinStepDone" hidden>
+      <h2 id="joinDoneTitle">Check your email</h2>
+      <p class="join-sub" id="joinDoneText"></p>
+      <button type="button" class="btn btn-primary join-submit" id="joinDoneClose">Done</button>
+    </div>
+  </div>
+</dialog>
 <script>
 function setLanguage(code) {
   document.documentElement.lang = code;
@@ -179,6 +249,111 @@ function defaultLanguageFromGeo() {
 }
 
 defaultLanguageFromGeo();
+
+// --- Create-profile dialog -------------------------------------------------
+// Signs people up through Supabase Auth with an email link. The publishable
+// key is meant to be public; access is controlled by row-level security.
+const SUPABASE_URL = 'https://omfcsehehnfkcfenryje.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_unnzud0lRP2QeYQ6WMDRpg_zAUB98gH';
+
+(function () {
+  const dialog = document.getElementById('joinDialog');
+  const stepChoose = document.getElementById('joinStepChoose');
+  const form = document.getElementById('joinStepForm');
+  const stepDone = document.getElementById('joinStepDone');
+  const typeLabel = document.getElementById('joinTypeLabel');
+  const msg = document.getElementById('joinMsg');
+  const submit = document.getElementById('joinSubmit');
+  const labels = { candidate: 'For Candidates', resident: 'For Residents (Free)' };
+  let accountType = null;
+
+  function show(step) {
+    stepChoose.hidden = step !== 'choose';
+    form.hidden = step !== 'form';
+    stepDone.hidden = step !== 'done';
+  }
+  function setMsg(text, isError) {
+    msg.textContent = text || '';
+    msg.classList.toggle('error', !!isError);
+  }
+  function chooseType(type) {
+    accountType = type;
+    typeLabel.textContent = labels[type];
+    setMsg('');
+    show('form');
+    document.getElementById('joinName').focus();
+  }
+  function open(type) {
+    if (!dialog.open) dialog.showModal();
+    if (type === 'candidate' || type === 'resident') chooseType(type);
+    else show('choose');
+  }
+  function done(title, text) {
+    document.getElementById('joinDoneTitle').textContent = title;
+    document.getElementById('joinDoneText').textContent = text;
+    if (!dialog.open) dialog.showModal();
+    show('done');
+  }
+
+  document.querySelectorAll('[data-join]').forEach((el) =>
+    el.addEventListener('click', () => open(el.dataset.join)));
+  stepChoose.querySelectorAll('[data-type]').forEach((el) =>
+    el.addEventListener('click', () => chooseType(el.dataset.type)));
+  document.getElementById('joinChange').addEventListener('click', () => show('choose'));
+  document.getElementById('joinClose').addEventListener('click', () => dialog.close());
+  document.getElementById('joinDoneClose').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = form.username.value.trim();
+    const email = form.email.value.trim();
+    const zip = form.zip.value.trim();
+    if (name.length < 2) { setMsg('Enter a user name (at least 2 characters).', true); form.username.focus(); return; }
+    if (!form.email.checkValidity() || !email) { setMsg('Enter a valid email address.', true); form.email.focus(); return; }
+    if (!/^[0-9]{5}(-[0-9]{4})?$/.test(zip)) { setMsg('Enter a 5-digit zip code.', true); form.zip.focus(); return; }
+
+    submit.disabled = true;
+    setMsg('Creating your profile…');
+    try {
+      const redirect = location.origin + location.pathname;
+      const res = await fetch(SUPABASE_URL + '/auth/v1/otp?redirect_to=' + encodeURIComponent(redirect), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_PUBLISHABLE_KEY },
+        body: JSON.stringify({
+          email: email,
+          create_user: true,
+          data: {
+            display_name: name,
+            zip_code: zip,
+            account_type: accountType,
+            preferred_language: document.documentElement.lang || 'en'
+          }
+        })
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.msg || body.error_description || body.message || 'Sign-up failed (' + res.status + ').');
+      }
+      form.reset();
+      done('Check your email', 'We sent a link to ' + email + '. Open it to finish creating your profile.');
+    } catch (err) {
+      setMsg(err.message || 'Something went wrong. Please try again.', true);
+    } finally {
+      submit.disabled = false;
+    }
+  });
+
+  // Returning from the email link: Supabase puts the result in the URL hash.
+  const hash = new URLSearchParams(location.hash.slice(1));
+  if (hash.get('access_token')) {
+    history.replaceState(null, '', location.pathname + location.search);
+    done('Welcome to SCATE', 'Your email is confirmed and your profile is created.');
+  } else if (hash.get('error_description')) {
+    history.replaceState(null, '', location.pathname + location.search);
+    done('That link didn\u2019t work', hash.get('error_description') + '. Request a new link by creating your profile again.');
+  }
+})();
 </script>
 </body>
 </html>
